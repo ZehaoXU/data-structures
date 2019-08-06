@@ -4,6 +4,33 @@
  * [34] Find First and Last Position of Element in Sorted Array
  */
 class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        int[] res = new int[]{-1,-1};
+        int l = 0, r = nums.length;
+        while (l < r) {
+            int m = l + (r-l)/2;
+            if (nums[m] < target) {
+                l = m + 1;
+            }
+            else    r = m;
+        }
+        if (l == nums.length || nums[l] != target)    return res;
+        res[0] = l;
+        l = 0;
+        r = nums.length;
+        while (l < r) {
+            int m = l + (r-l)/2;
+            if (nums[m] <= target) {
+                l = m+1;
+            }
+            else    r = m;
+        }
+        res[1] = l-1;
+        return res;
+    }
+}
+
+class SolutionFirst {
     /**
      * 二分查找变式，根据mid与target每次划分空间的不同，两次二分查找分别确定左右边界，第一次还可确定是否存在；注意右侧边界需要判断找到的是target还是比target大的第一个数
      * 因为mid始终包含在左半边搜索中！

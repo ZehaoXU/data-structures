@@ -4,6 +4,20 @@
  * [35] Search Insert Position
  */
 class Solution {
+    public int searchInsert(int[] nums, int target) {
+        int l = 0, r = nums.length;
+        while (l < r) {
+            int m = l + (r-l)/2;
+            if (nums[m] < target) {
+                l = m+1;
+            }
+            else    r = m;
+        }
+        return l;
+    }
+}
+
+class SolutionFirstTime {
     /**
      * 非递归二分查找
      * 时间复杂度 O(logn); 空间复杂度 O(1)
