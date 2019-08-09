@@ -1,3 +1,5 @@
+import java.lang.*;
+import java.util.*;
 /*
  * @lc app=leetcode id=454 lang=java
  *
@@ -42,8 +44,47 @@
  * 
  */
 class Solution {
+    /**
+     * 沿用sum系列的hashMap思想，先将AB CD两两分组，然后计算AB中的和以及和的组成方式（count），然后一边计算CD的和一边判断-sum在不在mapAB中！
+     * 不用重复计算CD的和，然后再遍历map寻找！
+     * 时间复杂度 O(n^2); 空间复杂度 O(n);
+     * Your runtime beats 9.14 % of java submissions
+     * Your memory usage beats 12 % of java submissions (82.2 MB)
+     * @param A
+     * @param B
+     * @param C
+     * @param D
+     * @return
+     */
     public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
-        
+        int n = A.length;
+        if (n == 0) return 0;
+        // A+B, sum->sumCount
+        Map<Integer, Integer> mapAB = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int sum = A[i] + B[j];
+                mapAB.put(sum, mapAB.getOrDefault(sum, 0)+1);
+            }
+        }
+        // C+D, sum->sumCount
+        // 这一遍可以不要！直接边计算sum，一边判断-sum在不在mapAB中
+        Map<Integer, Integer> mapCD = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int sum = C[i] + D[j];
+                mapCD.put(sum, mapCD.getOrDefault(sum, 0)+1);
+            }
+        }
+        // find
+        int res = 0;
+        for (Integer num : mapAB.keySet()) {
+            if (mapCD.containsKey(-1 * num)) {
+                res += mapAB.get(num) * mapCD.get(-1 * num);
+            }
+        }
+
+        return res;
     }
 }
 
