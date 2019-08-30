@@ -46,6 +46,17 @@
  * 
  */
 class Solution {
+    /**
+     * dp,非常难想，基本想不到，需要背诵
+     * dp[k][i]表示前i个元素，分成k组 平均数的最大和。转移公式dp[k][i] = max(dp[k-1][j]+avg(i-j)) 对于i之前的每个j寻找分成k-1类的最大平均和 以及i-j的平均数 的总和。初始条件k=1时，dp[1][i]就是前i个数的平均值
+     * 小技巧：求i-j的平均数，可以维护一个前缀数组，sum[i]表示前i个数的和
+     * TC O(K*n^2); SC O(K*n)   因为k层之和k-1层有关，所以可以压缩到n
+     * Your runtime beats 77.44 % of java submissions
+     * Your memory usage beats 100 % of java submissions (34.7 MB)
+     * @param A
+     * @param K
+     * @return
+     */
     public double largestSumOfAverages(int[] A, int K) {
         double[][] dp = new double[K+1][A.length];
         double[] sum = new double[A.length];
