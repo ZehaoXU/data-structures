@@ -1,3 +1,5 @@
+import java.lang.*;
+import java.util.*;
 /*
  * @lc app=leetcode id=174 lang=java
  *
@@ -80,7 +82,7 @@
  * 
  * 
  */
-class Solution {
+class SolutionFirst {
     /**
      * DP，存在的正数是一个比较困难的情况，如果从00开始碰到正数比较难进行下去。故从右下开始，存储来到这一格的要求的最小hp值，是由hp[i+1][j] and hp[i][j+1]中的较小者 与 这一格代价计算得到。
      * hp[i][j] = min(hp[i][j+1], hp[i+1][j]) - grid[i][j] 如果这一格的value是一个很大的正数，能够cover后面所需的血量，则hp会小于零，故小于等于零时，hp取1
@@ -110,6 +112,35 @@ class Solution {
             }
         }
         return hp[0][0];
+    }
+}
+
+class Solution {
+    /**
+     * dp, Q62变形，更难，因为数字有正也有负（如果只有正或者负，就相当于最短路径）。dp[i][j]表示走到i j格子前，需要 转移方程比较复杂（有一个特殊情况 就是加血超过后面路径所有的cost时，到这个格子前仍需至少一滴血）
+     * TC O(mn); SC O(n) compressed
+     * Your runtime beats 96.53 % of java submissions
+     * Your memory usage beats 58.82 % of java submissions (42.3 MB)
+     * @param dungeon
+     * @return
+     */
+    public int calculateMinimumHP(int[][] dungeon) {
+        int m = dungeon.length;
+        int n = dungeon[0].length;
+        int[] down = new int[n+1];
+        Arrays.fill(down, Integer.MAX_VALUE);
+        down[n-1] = 1;
+        // fill the table
+        for (int i = m-1; i >= 0; i--) {
+            int[] curr = new int[n+1];
+            curr[n] = Integer.MAX_VALUE;
+            for (int j = n-1; j >= 0; j--) {
+                curr[j] = Math.min(curr[j+1], down[j]) - dungeon[i][j];
+                curr[j] = Math.max(curr[j], 1);
+            }
+            down = curr;
+        }
+        return down[0];
     }
 }
 
